@@ -4,6 +4,7 @@ import com.sky.constant.JwtClaimsConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.properties.JwtProperties;
 import com.sky.result.Result;
@@ -14,11 +15,8 @@ import com.sky.vo.EmployeeLoginVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.sky.result.PageResult ;
+import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
 import java.time.*;
@@ -47,8 +45,6 @@ public class EmployeeController {
      */
     @PostMapping("/login")
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
-        log.info("员工登录：{}", employeeLoginDTO);
-
         Employee employee = employeeService.login(employeeLoginDTO);
 
         //登录成功后，生成jwt令牌
@@ -82,6 +78,31 @@ public class EmployeeController {
     @PostMapping()
     public Result<String> save(@RequestBody EmployeeDTO employeeDTO) {
         employeeService.save(employeeDTO);
+        return Result.success();
+    }
+
+    @GetMapping("/page")
+    public Result<PageResult> getPage(EmployeePageQueryDTO employeePageQueryDTO){
+        PageResult pageResult = employeeService.getPage(employeePageQueryDTO);
+        return Result.success(pageResult);
+    }
+
+    @PostMapping("/status/{status}")
+    public Result startOrStop(@PathVariable Integer status, Long id) {
+        System.out.println("Status: " + status + ",Id : " + id);
+        employeeService.startOrStop(status, id);
+        return Result.success();
+    }
+
+    @GetMapping("/{id}")
+    public Result<Employee> getId(@PathVariable Long id){
+        Employee employee = employeeService.getById(id);
+        return Result.success(employee);
+    }
+
+    @PutMapping
+    public Result updateById(@RequestBody Employee employee){
+        employeeService.updateById(employee);
         return Result.success();
     }
 

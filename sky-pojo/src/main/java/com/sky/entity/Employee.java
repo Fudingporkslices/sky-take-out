@@ -1,9 +1,13 @@
 package com.sky.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import lombok.Data;
+import org.springframework.context.annotation.Bean;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -12,6 +16,7 @@ import java.util.Date;
 @TableName(value ="employee")
 @Data
 public class Employee implements Serializable {
+
     private Long id;
 
     private String name;
@@ -28,9 +33,11 @@ public class Employee implements Serializable {
 
     private Integer status;
 
-    private Date createTime;
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createTime;
 
-    private Date updateTime;
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updateTime;
 
     private Long createUser;
 
